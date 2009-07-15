@@ -1,0 +1,26 @@
+clear all;
+x=-1:0.04:1;
+y=x;
+[xx,yy]=meshgrid(x,y);
+r = sqrt(xx.*xx+yy.*yy);
+z = (r<1)*1.0;
+z(find(r==1))=1;
+a=['k' 'k--' 'k:' 'k-.' 'k.'];
+w=[0 0.125 0.25 0.5 1];
+hold on;
+for J=1:5;
+    zz=z;
+    zz=zz.*exp(j*pi*2*w(J).*(xx.^2+yy.^2));
+    f=xcorr2(zz);
+    f=real(f);
+    f=f/max(max(f));
+    y2=0:0.02:1;
+    ii=1:51;
+    plot(y2,f(51,ii+50),a(J),'LineWidth',2);
+end
+legend('w=0','w=1/8\lambda','w=1/4\lambda','w=1/2\lambda','w=1\lambda');
+xlabel('f_x/2f_0');ylabel('OTF');
+axis([0 1 -0.1 1 ]);
+title('离焦系统的OTF分析');
+grid on;
+hold off;
